@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Davi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      color: white;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      position: relative;
+    }
+
+    .wave {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: 0;
+      left: 0;
+      background: radial-gradient(circle at 20% 20%, #5d5dfc 10%, transparent 11%),
+                  radial-gradient(circle at 80% 80%, #f094fb 10%, transparent 11%),
+                  radial-gradient(circle at 30% 80%, #00c9ff 10%, transparent 11%);
+      background-size: 100% 100%;
+      animation: waveMove 20s linear infinite;
+      z-index: 0;
+      opacity: 0.4;
+      filter: blur(100px);
+    }
+
+    @keyframes waveMove {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(-25%, -25%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      font-size: 2rem;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    input[type="text"], select {
+      padding: 10px;
+      width: 70%;
+      max-width: 300px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: black;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #ucapanSelamat {
+      margin-top: 25px;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      max-width: 600px;
+      margin-inline: auto;
+    }
+
+    .emoji {
+      font-size: 36px;
+      animation: pop 0.6s ease-in-out;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 8px;
+      z-index: 20;
+    }
+
+    .theme-toggle button {
+      background: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 10px;
+      margin: 5px 0;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .lagu-section {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .lagu-section input {
+      padding: 10px;
+      width: 70%;
+      max-width: 300px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .lagu-section button {
+      background-color: #00ffcc;
+      color: black;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      z-index: 10;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      input[type="text"] {
+        width: 90%;
+      }
+
+      .theme-toggle button {
+        font-size: 10px;
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wave"></div>
+
+  <div class="container">
+    <div id="awalSection">
+      <h1>Selamat Datang di Portal Davi</h1>
+      <form onsubmit="tampilkanUcapan(event)">
+        <input type="text" id="inputNama" placeholder="Masukkan Nama Anda" required />
+        <br>
+        <select id="inputGender" required>
+          <option value="">Pilih Jenis Kelamin</option>
+          <option value="pria">Pria</option>
+          <option value="wanita">Wanita</option>
+        </select>
+        <br>
+        <button type="submit">Masuk</button>
+      </form>
+    </div>
+
+    <div id="ucapanSelamat"></div>
+
+    <!-- Fitur Lagu -->
+    <div class="lagu-section" id="laguSection">
+      <h2>Cari Lagu Favoritmu 🎵</h2>
+      <form onsubmit="cariLagu(event)">
+        <input type="text" id="laguInput" placeholder="Masukkan nama lagu atau penyanyi" required />
+        <br>
+        <button type="submit">Cari di YouTube</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Opsi Tema -->
+  <div class="theme-toggle">
+    <button onclick="setTheme('light')">🌤 Terang</button>
+    <button onclick="setTheme('dark')">🌙 Gelap</button>
+  </div>
+
+  <footer>&copy; 2025 - Portal Davi</footer>
+
+  <script>
+    function tampilkanUcapan(event) {
+      event.preventDefault();
+      const nama = document.getElementById("inputNama").value.trim();
+      const gender = document.getElementById("inputGender").value;
+      let ucapan = `Selamat datang di website Davi, ${nama}!`;
+
+      if (gender === "pria") {
+        ucapan += " 👋 Bro!";
+      } else if (gender === "wanita") {
+        ucapan += " 😊 Kak!";
+      }
+
+      document.getElementById("ucapanSelamat").innerHTML = `<div class="emoji">🎉</div><br>${ucapan}`;
+      document.getElementById("laguSection").style.display = "block";
+      document.getElementById("awalSection").classList.add("hidden");
+    }
+
+    function cariLagu(e) {
+      e.preventDefault();
+      const query = document.getElementById("laguInput").value.trim();
+      const youtubeSearch = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+      window.open(youtubeSearch, "_blank");
+    }
+
+    function setTheme(mode) {
+      if (mode === "light") {
+        document.body.style.background = "linear-gradient(135deg, #ffecd2, #fcb69f)";
+      } else {
+        document.body.style.background = "linear-gradient(135deg, #667eea, #764ba2)";
+      }
+    }
+  </script>
+</body>
+</html>
